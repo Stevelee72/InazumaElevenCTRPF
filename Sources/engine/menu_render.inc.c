@@ -198,6 +198,29 @@ static void DrawMenuItem(const Item *it, int x, int y, int cellW, int selected)
         const u8 *c = on ? CGREEN : CINK;
         CTextClipBtn(x + 20, y - 1, T(it->label), cellW - 26, c[0], c[1], c[2], 0);
     }
+    else if (IsActionCheat(it->cheat))
+    {
+        char value[32] = {0};
+        int valueW = 0;
+        BrownBoxS(x, y + 3);
+        DrawCheatIcon(x + 17, y - 1, it->cheat);
+        if (it->cheat == CH_PLAYER_SLOT)
+            siprintf(value, "%lu", (unsigned long)g_playerSlot);
+        else if (it->cheat == CH_PLAYER_EXP && g_family == GF_IE3)
+            siprintf(value, "%lu", (unsigned long)R32(PlayerExpAddr()));
+        if (value[0])
+        {
+            valueW = CTextWidth(value);
+            CText(x + cellW - 6 - valueW, y - 1, value, GREEN_ON, 0);
+        }
+        CTextClipBtn(x + 37, y - 1, HkExpand(T(it->label), it->cheat), cellW - 53 - valueW, GOLD, 0);
+        if (flashCheat == it->cheat)
+        {
+            int fx = x + cellW - 6 - C6Width(flashMsg);
+            CText6(fx, y + 2, flashMsg, GREEN_ON);
+        }
+        else if (favorite[it->cheat]) StarIcon(x + cellW - 12, y + 3);
+    }
     else
     {
         int on = cheatState[it->cheat] || flashCheat == it->cheat;
