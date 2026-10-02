@@ -1,0 +1,10 @@
+--- a/Library/Sources/CTRPluginFrameworkImpl/Graphics/OSDImpl.cpp
++++ b/Library/Sources/CTRPluginFrameworkImpl/Graphics/OSDImpl.cpp
+@@
+-return HookContext::GetCurrent().OriginalFunction<u32>(isBottom, nextBank, leftFb, rightFb, stride, format, swap);
++HookContext &ctx = const_cast<HookContext &>(OSDHook.GetContext());
++return ctx.OriginalFunction<u32>(isBottom, nextBank, leftFb, rightFb, stride, format, swap);
+@@
+-return HookContext::GetCurrent().OriginalFunction<u32>(r0, params, isBottom, arg);
++HookContext &ctx = const_cast<HookContext &>(OSDHook.GetContext());
++return ctx.OriginalFunction<u32>(r0, params, isBottom, arg);

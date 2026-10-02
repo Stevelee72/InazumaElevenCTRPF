@@ -125,7 +125,7 @@ static void InitMenu(PluginMenu &menu) {
 void PatchProcess(FwkSettings&) {}
 void OnProcessExit(void) {}
 int main(void) {
- PluginMenu *menu=new PluginMenu("Inazuma Eleven CTRPF",0,1,1,"Multi-title plugin. Back up saves before one-shot editors.");
+ PluginMenu *menu=new PluginMenu("Inazuma Eleven CTRPF",0,1,2,"Multi-title plugin. Back up saves before one-shot editors.");
  // IE3's older rendering loop is incompatible with CTRPF frame-event
  // synchronization on original 3DS/2DS hardware. The menu does not need
  // that hook, so use CTRPF's independent render loop for every title.
