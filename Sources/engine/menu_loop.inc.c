@@ -18,8 +18,11 @@ static bool ThreadPredicate(void *thread_)
     if (current != thread_ && *(volatile u32 *)tls != THREADVARS_MAGIC) return true;
     return false;
 }
-static void PauseGame(void)  { svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS, 1, (u32)ThreadPredicate); }
-static void ResumeGame(void) { svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS, 0, (u32)ThreadPredicate); }
+// IE3 on original 3DS does not reliably resume after Luma's extended thread
+// scheduler operation. Keep the game running behind the framebuffer overlay;
+// Present() continuously redraws the menu while it is open.
+static void PauseGame(void)  { }
+static void ResumeGame(void) { }
 
 // ===================== Menu loop =====================
 // Navigation state is persistent: reopening the menu returns to the last spot.
