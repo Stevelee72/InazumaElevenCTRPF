@@ -11,24 +11,29 @@
 
 // ===================== Game pause (Luma thread scheduler) =====================
 #define THREADVARS_MAGIC  0x21545624
-// Use Luma's TLS-magic scheduler operation instead of the older KThread predicate callback.
-// The predicate form depends on a private KThread layout (including the TLS field offset), which
-// varies across Luma versions and caused IE3 to remain frozen after closing the menu. Every
-// plugin-owned thread starts with THREADVARS_MAGIC in its TLS, so operation 6 pauses only game
-// threads without dereferencing version-dependent kernel structures. If an old Luma does not
-// support the operation, leave the game running rather than issuing an unsafe matching resume.
+// Match Luma's own 3GX loader layout: KThread word 0x26 (byte offset 0x98) is the TLS pointer.
+// The inherited CTRComposer code used byte offset 0x94, so it read the field immediately before
+// TLS and could leave game threads locked after the menu closed. Keep the current worker running,
+// and spare any other plugin thread whose TLS starts with libctru's ThreadVars magic.
+static bool ThreadPredicate(void *thread_)
+{
+    u32 *thread = (u32 *)thread_;
+    u32 *tls = (u32 *)thread[0x26];
+    void *current = *(void **)0xFFFF9000;
+    return current != thread_ && *tls != THREADVARS_MAGIC;
+}
 static int g_gamePaused = 0;
 static void PauseGame(void)
 {
     Result r = svcControlProcess(CUR_PROCESS_HANDLE,
-        PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, 1, THREADVARS_MAGIC);
+        PROCESSOP_SCHEDULE_THREADS, 1, (u32)ThreadPredicate);
     g_gamePaused = R_SUCCEEDED(r);
 }
 static void ResumeGame(void)
 {
     if (!g_gamePaused) return;
     svcControlProcess(CUR_PROCESS_HANDLE,
-        PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, 0, THREADVARS_MAGIC);
+        PROCESSOP_SCHEDULE_THREADS, 0, (u32)ThreadPredicate);
     g_gamePaused = 0;
 }
 
