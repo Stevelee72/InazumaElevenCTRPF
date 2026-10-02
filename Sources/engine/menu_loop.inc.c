@@ -278,7 +278,7 @@ static void RunMenu(void)
         const Folder *fld = &folders[folderIdx];
         int changed = 0;
 
-        if (folderIdx == F_ROOT) // grouped 2-column grid
+        if (0) // The Inazuma home screen uses the same full-width list navigation as folders.
         {
             BuildRootLayout(fld);
             if (NavSkip(folderIdx, cursor)) cursor = RootFirstSel(fld);
@@ -433,8 +433,7 @@ static void RunMenu(void)
         // HOME fits in one grid screen, so it never scrolls. If you add enough rows to overflow
         // it, treat it like the reference build did: BuildRootLayout(fld), then move `scroll` as
         // a PIXEL offset that follows g_rlY[cursor] within the visible band.
-        if (folderIdx == F_ROOT) scroll = 0;
-        else
+        if (1)
         {
             int cvp = VisPos(folderIdx, cursor); // scroll tracks the cursor's VISIBLE position
             if (cvp < scroll)             scroll = cvp;
