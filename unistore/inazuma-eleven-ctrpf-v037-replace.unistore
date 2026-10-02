@@ -1,8 +1,8 @@
 {
   "storeInfo": {
-    "title": "Inazuma Eleven CTRPF",
+    "title": "Inazuma Eleven CTRPF v0.3.7",
     "author": "Stevelee72",
-    "description": "Inazuma Eleven CTRPF releases for Nintendo 3DS.",
+    "description": "Inazuma Eleven CTRPF v0.3.7 installer for Nintendo 3DS.",
     "url": "https://raw.githubusercontent.com/Stevelee72/InazumaElevenCTRPF/main/unistore/inazuma-eleven-ctrpf-v037-replace.unistore",
     "file": "inazuma-eleven-ctrpf-v037-replace.unistore",
     "version": 3,
@@ -11,22 +11,22 @@
   "storeContent": [
     {
       "info": {
-        "title": "Inazuma Eleven CTRPF",
+        "title": "Inazuma Eleven CTRPF v0.3.7",
         "author": "Stevelee72",
-        "description": "Multi-title CTRPF plugin for the European Inazuma Eleven 3, GO and GO Chrono Stones games, plus GO Galaxy translation-compatible profiles. Automatically installs one title-aware 3GX under every supported title ID.",
+        "description": "Installs the v0.3.7 multi-title plugin under every supported Inazuma Eleven title ID.",
         "category": ["game"],
         "console": ["3DS"],
-        "last_updated": "2026-10-02 (UTC)",
+        "last_updated": "2026-10-03 (UTC)",
         "license": "gpl-3.0",
         "version": "0.3.7"
       },
-      "Download & Install Plugin": [
+      "Download & Install Plugin v0.3.7": [
         {
           "type": "downloadRelease",
           "repo": "Stevelee72/InazumaElevenCTRPF",
           "file": "InazumaElevenCTRPF-unistore-v037.zip",
-          "output": "sdmc:/InazumaElevenCTRPF.zip",
-          "message": "Downloading the latest Inazuma Eleven CTRPF..."
+          "output": "sdmc:/InazumaElevenCTRPF-v037.zip",
+          "message": "Downloading Inazuma Eleven CTRPF v0.3.7..."
         },
         { "type": "deleteFile", "file": "sdmc:/luma/plugins/00040000000F7B00/default.3gx", "message": "Replacing old Bomb Blast plugin..." },
         { "type": "deleteFile", "file": "sdmc:/luma/plugins/00040000000F7C00/default.3gx", "message": "Replacing old Bomb Blast plugin..." },
@@ -42,14 +42,14 @@
         { "type": "deleteFile", "file": "sdmc:/luma/plugins/0004000000136D00/default.3gx", "message": "Replacing old Chrono Stones plugin..." },
         {
           "type": "extractFile",
-          "file": "sdmc:/InazumaElevenCTRPF.zip",
+          "file": "sdmc:/InazumaElevenCTRPF-v037.zip",
           "input": "",
           "output": "sdmc:/",
-          "message": "Installing plugins for all supported title IDs..."
+          "message": "Installing v0.3.7 for all supported title IDs..."
         },
         {
           "type": "deleteFile",
-          "file": "sdmc:/InazumaElevenCTRPF.zip",
+          "file": "sdmc:/InazumaElevenCTRPF-v037.zip",
           "message": "Cleaning up..."
         }
       ]
