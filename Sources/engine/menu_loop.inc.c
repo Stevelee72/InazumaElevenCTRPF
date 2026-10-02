@@ -11,18 +11,26 @@
 
 // ===================== Game pause (Luma thread scheduler) =====================
 #define THREADVARS_MAGIC  0x21545624
-static bool ThreadPredicate(void *thread_)
+// Use Luma's TLS-magic scheduler operation instead of the older KThread predicate callback.
+// The predicate form depends on a private KThread layout (including the TLS field offset), which
+// varies across Luma versions and caused IE3 to remain frozen after closing the menu. Every
+// plugin-owned thread starts with THREADVARS_MAGIC in its TLS, so operation 6 pauses only game
+// threads without dereferencing version-dependent kernel structures. If an old Luma does not
+// support the operation, leave the game running rather than issuing an unsafe matching resume.
+static int g_gamePaused = 0;
+static void PauseGame(void)
 {
-    u32   tls     = *(volatile u32 *)((u8 *)thread_ + 0x94);
-    void *current = *(void **)0xFFFF9000;
-    if (current != thread_ && *(volatile u32 *)tls != THREADVARS_MAGIC) return true;
-    return false;
+    Result r = svcControlProcess(CUR_PROCESS_HANDLE,
+        PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, 1, THREADVARS_MAGIC);
+    g_gamePaused = R_SUCCEEDED(r);
 }
-// IE3 on original 3DS does not reliably resume after Luma's extended thread
-// scheduler operation. Keep the game running behind the framebuffer overlay;
-// Present() continuously redraws the menu while it is open.
-static void PauseGame(void)  { }
-static void ResumeGame(void) { }
+static void ResumeGame(void)
+{
+    if (!g_gamePaused) return;
+    svcControlProcess(CUR_PROCESS_HANDLE,
+        PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, 0, THREADVARS_MAGIC);
+    g_gamePaused = 0;
+}
 
 // ===================== Menu loop =====================
 // Navigation state is persistent: reopening the menu returns to the last spot.
@@ -441,13 +449,7 @@ static void RunMenu(void)
             if (cvp >= scroll + MAX_ROWS) scroll = cvp - MAX_ROWS + 1;
         }
 
-        // The game intentionally remains running because pausing IE3's threads can prevent it
-        // from resuming on original 3DS hardware. Consequently it also keeps drawing over both
-        // screens. Recompose only when menu state changes, but re-blit every frame so the menu
-        // remains visible instead of flashing only when the player moves the cursor.
-        if (changed) ComposeMenu(&folders[folderIdx], depth, cursor, scroll);
-        Present();
-        BotBlitComposeBoth();
+        if (changed) { ComposeMenu(&folders[folderIdx], depth, cursor, scroll); Present(); }
     }
     } // end if (!g_quitToGame)
 

@@ -149,6 +149,7 @@ typedef enum ProcessOp
     PROCESSOP_GET_PA_FROM_VA,   ///< Get the physical address of the va within the process
                                 ///< svcControlProcess(handle, PROCESSOP_GET_PA_FROM_VA, (u32)&outPa, va)
     PROCESSOP_SCHEDULE_THREADS, ///< Lock(1)/Unlock(0) the process's threads (modern Luma). varg3 = thread predicate funcptr.
+    PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, ///< Lock/unlock every thread except those whose TLS starts with varg3.
 } ProcessOp;
 
 Result  svcControlProcess(Handle process, ProcessOp op, u32 varg2, u32 varg3);
