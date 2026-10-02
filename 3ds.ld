@@ -15,7 +15,7 @@ SECTIONS
 	/* =========== CODE section =========== */
 	. = 0x07000100;
 	__start__ = . ;
-	.text ALIGN(4) :
+	.text ALIGN(0x4) :
 	{
 		/* .init */		
 		bootloader.o (.text*)
@@ -48,7 +48,7 @@ SECTIONS
 		*(.gnu.linkonce.r*)	
 		SORT(CONSTRUCTORS)
 		. = ALIGN(4);
-	} : rodata
+	}
 
 	.ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } : rodata
 	__exidx_start = .;
@@ -123,16 +123,6 @@ SECTIONS
 		KEEP (*(SORT(.dtors.*)))	
 		KEEP (*(.dtors))
 	} : data
-
-	.rel.plt ALIGN(4):
-	{
-		*(.__rel_dyn_start)
-		*(.rel*)
-		*(.rel.*)
-		*(.rel.dyn)
-		*(.__rel_dyn_end)
-	} : data
-
 	
 	.bss ALIGN(4):
 	{	*(.__bss_start)

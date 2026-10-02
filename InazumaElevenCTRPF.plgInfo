@@ -1,11 +1,26 @@
-Author: Inazuma Eleven CTRPF contributors
+Author: Stevelee72
 
-Version: # Plugin version
+Version:
     Major: 0
-    Minor: 1
-    Revision: 2
+    Minor: 2
+    Revision: 0
+
+Targets:
+    - 0x000F7B00
+    - 0x000F7C00
+    - 0x000F7D00
+    - 0x000F7E00
+    - 0x000F7F00
+    - 0x000F8000
+    - 0x00112F00
+    - 0x00113000
+    - 0x00136C00
+    - 0x00136D00
+    - 0x0010BA00
+    - 0x0010BB00
 
 Title: Inazuma Eleven CTRPF
-Summary: Multi-title Inazuma Eleven cheat and utility plugin
+Summary: Hook-free Inazuma Eleven cheat menu
 Compatibility: Any
 MemorySize: 5MiB
+UsePrivateMemory: false

@@ -1,6 +1,6 @@
 # Inazuma Eleven CTRPF
 
-Early multi-title CTRPluginFramework plugin for the Nintendo 3DS. Version 0.1.2 is an **address-validation and IE3 compatibility build**: it converts the known public CTRPF/Gateshark editors shared by the supported game families into a native, title-aware menu. This revision includes a framework-level OSD fix for the menu-opening `svcBreak` observed on original 3DS hardware.
+Multi-title cheat and memory-tools plugin for Nintendo 3DS. Version 0.2.0 replaces CTRPluginFramework with the hook-free CTRComposer framebuffer engine after hardware testing showed CTRPF's display hook crashes Inazuma Eleven 3 on original 3DS. The current public CTRPF/Gateshark editors remain available as one-shot actions.
 
 ## Supported title profiles
 
@@ -64,7 +64,7 @@ make clean
 make
 ```
 
-The output is `InazumaElevenCTRPF.3gx`.
+The output is `InazumaElevenCTRPF.3gx`. Version 0.2.0 is derived from the MIT-licensed CTRComposer engine; see `LICENSE-CTRComposer`.
 
 ## Roadmap
 

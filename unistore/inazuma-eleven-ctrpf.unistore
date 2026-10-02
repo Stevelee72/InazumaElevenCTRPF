@@ -6,7 +6,7 @@
     "url": "https://raw.githubusercontent.com/Stevelee72/InazumaElevenCTRPF/main/unistore/inazuma-eleven-ctrpf.unistore",
     "file": "inazuma-eleven-ctrpf.unistore",
     "version": 3,
-    "revision": 3
+    "revision": 4
   },
   "storeContent": [
     {
@@ -18,7 +18,7 @@
         "console": ["3DS"],
         "last_updated": "2026-10-02 (UTC)",
         "license": "gpl-3.0",
-        "version": "0.1.2"
+        "version": "0.2.0"
       },
       "Download & Install Plugin": [
         {

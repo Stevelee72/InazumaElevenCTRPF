@@ -4,77 +4,82 @@ ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
 
-TOPDIR   ?= $(CURDIR)
+TOPDIR 		?= 	$(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-CTRPFLIB ?= $(TOPDIR)/libctrpf
-
-PLGNAME  := InazumaElevenCTRPF
-PLGINFO  := $(PLGNAME).plgInfo
-
-BUILD    := Build
-INCLUDES :=
-SOURCES  := Sources
-
-#---------------------------------------------------------------------------------
-# Options for code generation
-#---------------------------------------------------------------------------------
-
-ARCH      := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
-
-CFLAGS    := $(ARCH) -Os -mword-relocations \
-             -fomit-frame-pointer -ffunction-sections -fdata-sections -fno-strict-aliasing
-
-CFLAGS    += $(INCLUDE) -D__3DS__
-
-CXXFLAGS  := $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
-
-ASFLAGS   := $(ARCH)
-LDFLAGS   := -T $(TOPDIR)/3gx.ld $(ARCH) -Os -Wl,--gc-sections,--strip-discarded,--strip-debug
-
-LIBS      := -lctrpf -lctru
-LIBDIRS   := $(TOPDIR) $(CTRPFLIB) $(CTRULIB) $(PORTLIBS)
+# NOTE: TARGET is pinned rather than derived from the folder name, so the release
+# artifact is always CTRComposer-BlankTemplate.3gx no matter what you clone into.
+# Rename it (and PLGINFO / the Title: in the .plgInfo) when you fork the template.
+TARGET		:= 	InazumaElevenCTRPF
+PLGINFO		:= 	InazumaElevenCTRPF.plgInfo
+BUILD		:= 	build
+INCLUDES	:= 	ComposerIncludes
+LIBDIRS		:= 	$(CTRULIB)
+SOURCES 	:= 	Sources
 
 #---------------------------------------------------------------------------------
-# No real need to edit anything past this point unless you need to add additional rules for different file extensions
+# options for code generation
 #---------------------------------------------------------------------------------
+ARCH		:=	-march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard
 
+# -Wall -Wextra is worth keeping ON. This project shipped for a while without it; when it was
+# finally switched on the tree was clean apart from two deliberate cases (the unused `arg` that
+# svcCreateThread's signature forces, and `void main` in a plugin with no crt0). Silence here is
+# information - if a warning appears, read it.
+# -Wno-main: this is a plugin, not a program. Luma calls main() through the 3gx bootstrap, so it
+# takes no argc/argv and returns nothing - the standard signature would be a lie.
+CFLAGS		:=	-Os -mword-relocations -Wall -Wextra -Wno-main \
+				-fomit-frame-pointer -ffunction-sections -fno-strict-aliasing \
+				$(ARCH)
+
+CFLAGS		+=	$(INCLUDE) -D__3DS__
+
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
+
+ASFLAGS		:= $(ARCH)
+LDFLAGS		:= -T $(TOPDIR)/3ds.ld $(ARCH) -Os -Wl,-Map,$(notdir $*.map),--gc-sections
+
+LIBS		:= -lctru
+
+#---------------------------------------------------------------------------------
+# no real need to edit anything past this point unless you need to add additional
+# rules for different file extensions
+#---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
+#---------------------------------------------------------------------------------
 
-export OUTPUT   := $(TOPDIR)/$(PLGNAME)
-export TOPDIR   := $(TOPDIR)
-export VPATH    := $(foreach dir,$(SOURCES),$(TOPDIR)/$(dir)) $(foreach dir,$(DATA),$(TOPDIR)/$(dir))
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
+export TOPDIR	:=	$(CURDIR)
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+					$(foreach dir,$(DATA),$(CURDIR)/$(dir))
 
-export DEPSDIR  := $(TOPDIR)/$(BUILD)
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES          := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES        := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
-SFILES          := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 
-export LD       := $(CXX)
-export OFILES   := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
-export INCLUDE  := $(foreach dir,$(INCLUDES),-I $(TOPDIR)/$(dir)) \
-                   $(foreach dir,$(LIBDIRS),-I $(dir)/include) \
-                   -I $(TOPDIR)/$(BUILD)
+export LD 		:= 	$(CXX)
+export OFILES	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I $(CURDIR)/$(dir) ) \
+					$(foreach dir,$(LIBDIRS),-I $(dir)/include) \
+					-I $(CURDIR)/$(BUILD)
 
-export LIBPATHS := $(foreach dir,$(LIBDIRS),-L $(dir)/lib)
+export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L $(dir)/lib)
 
 .PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
-
 all: $(BUILD)
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
-	@$(MAKE) --no-print-directory -C $(BUILD) -f $(TOPDIR)/Makefile
-	@rm -rf $(BUILD)
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
-
 clean:
-	@echo Cleaning ...
-	@rm -fr $(BUILD) $(OUTPUT).3gx $(OUTPUT).elf luma luma.zip
+	@echo clean ...
+	@-rm -fr $(BUILD) $(OUTPUT).3gx $(OUTPUT).elf
 
 re: clean all
 
@@ -82,35 +87,31 @@ re: clean all
 
 else
 
-DEPENDS := $(OFILES:.o=.d)
+DEPENDS	:=	$(OFILES:.o=.d)
 
 #---------------------------------------------------------------------------------
-# Main targets
+# main targets
 #---------------------------------------------------------------------------------
-
 $(OUTPUT).3gx : $(OFILES)
-
 #---------------------------------------------------------------------------------
-# You need a rule like this for each extension you use as binary data
+# you need a rule like this for each extension you use as binary data
 #---------------------------------------------------------------------------------
-
-%.bin.o: %.bin
+%.bin.o	:	%.bin
+#---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	@$(bin2o)
 
 #---------------------------------------------------------------------------------
-
-ifeq ($(shell uname -s), Darwin)
-    TOOL = $(TOPDIR)/3gxtool
-else
-    TOOL = $(TOPDIR)/3gxtool.exe
-endif
-
 %.3gx: %.elf
 	@echo creating $(notdir $@)
-	@$(TOOL) -s $(word 1, $^) $(TOPDIR)/$(PLGINFO) $@
+	@$(TOPDIR)/3gxtool.exe -s $(word 1, $^) $(TOPDIR)/$(PLGINFO) $@
+
+# Without this, make treats the .elf as a disposable intermediate of the .elf->.3gx chain and
+# deletes it right after linking. Keeping it around lets Tools/fingerprint.sh inspect symbols
+# (see PLANO-REFATORACAO.md, Etapa 0) instead of every refactor step needing a fresh objdump.
+.PRECIOUS: %.elf
 
 -include $(DEPENDS)
 
-#---------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------
 endif
