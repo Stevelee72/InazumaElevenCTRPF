@@ -17,8 +17,17 @@
 // the plugin spins forever WITH THE GAME PAUSED, which reads as a dead console.
 static void DrainButtons(u32 mask)
 {
-    for (int i = 0; i < 125 && (HID_PAD & mask); ++i)
+    // A single released sample is not enough on real 3DS buttons. SELECT can briefly read as
+    // released while the contact is still settling, then appear pressed again; the menu sees
+    // that second edge and immediately closes. Require several consecutive released frames so
+    // the press that opened a screen can never also dismiss it.
+    int released = 0;
+    for (int i = 0; i < 188 && released < 8; ++i)
+    {
+        if (HID_PAD & mask) released = 0;
+        else released++;
         svcSleepThread(16 * 1000 * 1000);
+    }
 }
 
 // ---- D-pad auto-repeat (typematic) -------------------------------------------------------------

@@ -1,6 +1,6 @@
 # Inazuma Eleven CTRPF
 
-Multi-title cheat and memory-tools plugin for Nintendo 3DS. Version 0.3.1 uses the hook-free CTRComposer framebuffer engine, adds a first IE3 per-player editor, the remaining published IE3 unlock codes, a full-width readable menu, and eight selectable themes.
+Multi-title cheat and memory-tools plugin for Nintendo 3DS. Version 0.3.3 uses the hook-free CTRComposer framebuffer engine, adds a first IE3 per-player editor, the remaining published IE3 unlock codes, a readable grid menu, eight selectable themes, and hardened button-release handling for real hardware.
 
 ## Supported title profiles
 
