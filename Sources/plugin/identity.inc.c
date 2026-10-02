@@ -22,8 +22,8 @@
 // no-op silently. PLUGIN_VER and PLUGIN_TAG are derived from these, never typed twice, so the two
 // cannot drift apart. Keep the Version: block in the .plgInfo in sync - that one is a second file.
 #define PLUGIN_VER_MAJOR 0
-#define PLUGIN_VER_MINOR 2
-#define PLUGIN_VER_PATCH 1
+#define PLUGIN_VER_MINOR 3
+#define PLUGIN_VER_PATCH 0
 
 #define PLUGIN_STR2(x) #x
 #define PLUGIN_STR(x) PLUGIN_STR2(x)
