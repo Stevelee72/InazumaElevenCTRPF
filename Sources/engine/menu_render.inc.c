@@ -309,7 +309,7 @@ static void ComposeMenu(const Folder *fld, int depth, int cursor, int scroll)
     // a LAYOUT CHOICE, not an engine rule - add folders to this test, or drop the grid entirely
     // and let everything be a list. When a grid folder overflows, `scroll` is a pixel offset and
     // rows are clipped and arrowed.
-    int twoCol = 0; // Inazuma's labels need the full-width readable list layout.
+    int twoCol = (fld == &folders[F_ROOT]);
     if (twoCol)
     {
         BuildRootLayout(fld);
