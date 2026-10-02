@@ -1,6 +1,6 @@
 # Inazuma Eleven CTRPF
 
-Early multi-title CTRPluginFramework plugin for the Nintendo 3DS. Version 0.1.0 is an **address-validation build**: it converts the known public CTRPF/Gateshark editors shared by the supported game families into a native, title-aware menu.
+Early multi-title CTRPluginFramework plugin for the Nintendo 3DS. Version 0.1.1 is an **address-validation build**: it converts the known public CTRPF/Gateshark editors shared by the supported game families into a native, title-aware menu. This revision disables frame-event synchronization to avoid an IE3 menu-opening `svcBreak` observed on original 3DS hardware.
 
 ## Supported title profiles
 
