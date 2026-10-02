@@ -1,0 +1,46 @@
+{
+  "storeInfo": {
+    "title": "Inazuma Eleven CTRPF",
+    "author": "Stevelee72",
+    "description": "Inazuma Eleven CTRPF releases for Nintendo 3DS.",
+    "url": "https://raw.githubusercontent.com/Stevelee72/InazumaElevenCTRPF/main/unistore/inazuma-eleven-ctrpf.unistore",
+    "file": "inazuma-eleven-ctrpf.unistore",
+    "version": 3,
+    "revision": 1
+  },
+  "storeContent": [
+    {
+      "info": {
+        "title": "Inazuma Eleven CTRPF",
+        "author": "Stevelee72",
+        "description": "Multi-title CTRPF plugin for the European Inazuma Eleven 3, GO and GO Chrono Stones games, plus GO Galaxy translation-compatible profiles. Automatically installs one title-aware 3GX under every supported title ID.",
+        "category": ["game"],
+        "console": ["3DS"],
+        "last_updated": "2026-10-02 (UTC)",
+        "license": "gpl-3.0",
+        "version": "0.1.0"
+      },
+      "Download & Install Plugin": [
+        {
+          "type": "downloadRelease",
+          "repo": "Stevelee72/InazumaElevenCTRPF",
+          "file": "InazumaElevenCTRPF-unistore.zip",
+          "output": "sdmc:/InazumaElevenCTRPF.zip",
+          "message": "Downloading the latest Inazuma Eleven CTRPF..."
+        },
+        {
+          "type": "extractFile",
+          "file": "sdmc:/InazumaElevenCTRPF.zip",
+          "input": "",
+          "output": "sdmc:/",
+          "message": "Installing plugins for all supported title IDs..."
+        },
+        {
+          "type": "deleteFile",
+          "file": "sdmc:/InazumaElevenCTRPF.zip",
+          "message": "Cleaning up..."
+        }
+      ]
+    }
+  ]
+}
