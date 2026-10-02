@@ -3,10 +3,10 @@
     "title": "Inazuma Eleven CTRPF",
     "author": "Stevelee72",
     "description": "Inazuma Eleven CTRPF releases for Nintendo 3DS.",
-    "url": "https://raw.githubusercontent.com/Stevelee72/InazumaElevenCTRPF/main/unistore/inazuma-eleven-ctrpf.unistore?rev=9",
+    "url": "https://raw.githubusercontent.com/Stevelee72/InazumaElevenCTRPF/main/unistore/inazuma-eleven-ctrpf.unistore?rev=10",
     "file": "inazuma-eleven-ctrpf.unistore",
     "version": 3,
-    "revision": 9
+    "revision": 10
   },
   "storeContent": [
     {
@@ -18,7 +18,7 @@
         "console": ["3DS"],
         "last_updated": "2026-10-02 (UTC)",
         "license": "gpl-3.0",
-        "version": "0.3.3"
+        "version": "0.3.4"
       },
       "Download & Install Plugin": [
         {

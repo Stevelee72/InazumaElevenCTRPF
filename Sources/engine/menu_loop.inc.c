@@ -441,7 +441,13 @@ static void RunMenu(void)
             if (cvp >= scroll + MAX_ROWS) scroll = cvp - MAX_ROWS + 1;
         }
 
-        if (changed) { ComposeMenu(&folders[folderIdx], depth, cursor, scroll); Present(); }
+        // The game intentionally remains running because pausing IE3's threads can prevent it
+        // from resuming on original 3DS hardware. Consequently it also keeps drawing over both
+        // screens. Recompose only when menu state changes, but re-blit every frame so the menu
+        // remains visible instead of flashing only when the player moves the cursor.
+        if (changed) ComposeMenu(&folders[folderIdx], depth, cursor, scroll);
+        Present();
+        BotBlitComposeBoth();
     }
     } // end if (!g_quitToGame)
 
